@@ -29,16 +29,33 @@
 /// This means that if you use wordlview=cn worldview with the Kenya (ke) country filter, a search for an address in this area will not be successful. Instead, you would need to use worldview=cn in combination with the South Sudan (ss) country filter.
 /// Be cautious when combining worldview with the country parameter, since these indices are only loosely coupled.
 enum MapboxSearchGeocodingWorldview {
+  /// Features for an Argentinian audience
   ar('ar'),
+
+  /// Features for a mainland Chinese audience
   cn('cn'),
+
+  /// Features for an Indian audience
   in_('in'),
+
+  /// Features for a Japanese audience
   jp('jp'),
+
+  /// Features for a Moroccan audience
   ma('ma'),
+
+  /// Features for a Russian audience
   ru('ru'),
+
+  /// Features for a Turkish audience
   tr('tr'),
+
+  /// Features for an American audience
   us('us');
 
+  /// The queryParameter value
   final String queryParameter;
 
+  /// Constructor of MapboxSearchGeocodingWorldview
   const MapboxSearchGeocodingWorldview(this.queryParameter);
 }

@@ -9,60 +9,60 @@ import 'package:dart_mapbox_search/src/models/mapbox_search_external.dart';
 import 'package:dart_mapbox_search/src/models/mapbox_search_feature_properties_coordinates.dart';
 import 'package:dart_mapbox_search/src/utils/typdefs.dart';
 
-// Representing the properties of a Mapbox feature
+/// Representing the properties of a Mapbox feature
 class MapboxSearchSearchFeatureProperties {
-  // The name of the feature.
+  /// The name of the feature.
   final String name;
 
-  // The preferred name of the feature, if different than name.
+  /// The preferred name of the feature, if different than name.
   final String? namePreferred;
 
-  // The ID associated with the feature.
+  /// The ID associated with the feature.
   final String mapboxId;
 
-  // The type of the result. For POIs, this will be poi. For address-type results, the global context hierarchy is used (country, region, postcode, district, place, locality, neighborhood, address).
+  /// The type of the result. For POIs, this will be poi. For address-type results, the global context hierarchy is used (country, region, postcode, district, place, locality, neighborhood, address).
   final MapboxSearchFeatureType featureType;
 
-  // The address of the result containing the address number and street.
+  /// The address of the result containing the address number and street.
   final String? address;
 
-  // The full address of the result, which concatenates address and place_formatted.
+  /// The full address of the result, which concatenates address and place_formatted.
   final String? fullAddress;
 
-  // A formatted string of result context comprised of the place, region, country, and postcode. It is the part of the result which comes after address.
+  /// A formatted string of result context comprised of the place, region, country, and postcode. It is the part of the result which comes after address.
   final String? placeFormatted;
 
-  // The context of the feature.
+  /// The context of the feature.
   final MapboxSearchContext context;
 
-  // The geographical coordinates of the result.
+  /// The geographical coordinates of the result.
   final MapboxSearchFeaturePropertiesCoordinates coordinates;
 
-  // A bounding box.
+  /// A bounding box.
   final MapboxSearchBox? bbox;
 
-  // The language of the result consisting of an IETF language tag.
+  /// The language of the result consisting of an IETF language tag.
   final MapboxSearchLanguage? language;
 
-  // An associated Maki icon to use for this result.
+  /// An associated Maki icon to use for this result.
   final MakiIcon? maki;
 
-  // An array including the POI categories the result falls into, if it is a POI.
+  /// An array including the POI categories the result falls into, if it is a POI.
   final List<MapboxSearchPoiCategory>? poiCategories;
 
-  // The brand name of the result, if it is a POI and is applicable.
+  /// The brand name of the result, if it is a POI and is applicable.
   final List<String>? brand;
 
-  // The canonical brand ID of the result, if it is a POI and is applicable.
+  /// The canonical brand ID of the result, if it is a POI and is applicable.
   final List<String>? brandId;
 
-  // A list containing objects consisting of the IDs of the feature found in external databases and data source names.
+  /// A list containing objects consisting of the IDs of the feature found in external databases and data source names.
   final List<MapboxSearchExternal>? externals;
 
-  // An object containing additional metadata for the feature, if applicable.
+  /// An object containing additional metadata for the feature, if applicable.
   final Json? metadata;
 
-  // Constructor for MapboxSearchSearchFeatureProperties
+  /// Constructor for MapboxSearchSearchFeatureProperties
   const MapboxSearchSearchFeatureProperties(
       {required this.name,
       this.namePreferred,
@@ -82,7 +82,7 @@ class MapboxSearchSearchFeatureProperties {
       this.externals,
       this.metadata});
 
-  // Factory method to create MapboxSearchSearchFeatureProperties from JSON data
+  /// Factory method to create MapboxSearchSearchFeatureProperties from JSON data
   factory MapboxSearchSearchFeatureProperties.fromJson(Json json) {
     return MapboxSearchSearchFeatureProperties(
       name: json['name'] as String,

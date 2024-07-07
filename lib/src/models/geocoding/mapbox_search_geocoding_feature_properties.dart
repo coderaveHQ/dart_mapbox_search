@@ -6,39 +6,39 @@ import 'package:dart_mapbox_search/src/models/mapbox_search_context.dart';
 import 'package:dart_mapbox_search/src/models/mapbox_search_feature_properties_coordinates.dart';
 import 'package:dart_mapbox_search/src/utils/typdefs.dart';
 
-// Represents the properties of a geographic feature returned by Mapbox Geocoding API
+/// Represents the properties of a geographic feature returned by Mapbox Geocoding API
 class MapboxSearchGeocodingFeatureProperties {
-  // The unique identifier of the feature, referred to as mapbox_id in other parts of the response
+  /// The unique identifier of the feature, referred to as mapbox_id in other parts of the response
   final String? mapboxId;
 
-  // The type of the feature, such as country, region, postcode, etc.
+  /// The type of the feature, such as country, region, postcode, etc.
   final MapboxSearchFeatureType? featureType;
 
-  // The formatted name of the feature
+  /// The formatted name of the feature
   final String? name;
 
-  // The preferred name of the feature
+  /// The preferred name of the feature
   final String? namePreffered;
 
-  // Formatted string of result context: place, region, country, postcode.
+  /// Formatted string of result context: place, region, country, postcode.
   final String? placeFormatted;
 
-  // Full formatted string of the feature, combining name_preferred and place_formatted.
+  /// Full formatted string of the feature, combining name_preferred and place_formatted.
   final String? fullAddress;
 
-  // Represents the hierarchy of encompassing parent features
+  /// Represents the hierarchy of encompassing parent features
   final MapboxSearchContext? context;
 
-  // Geographical position and accuracy of the feature, including routable points
+  /// Geographical position and accuracy of the feature, including routable points
   final MapboxSearchFeaturePropertiesCoordinates? coordinates;
 
-  // The bounding box of the feature
+  /// The bounding box of the feature
   final MapboxSearchBox? bbox;
 
-  // Additional metadata indicating how the result components match to the input query
+  /// Additional metadata indicating how the result components match to the input query
   final MapboxSearchGeocodingMatch? matchCode;
 
-  // Constructor for MapboxSearchGeocodingFeatureProperties
+  /// Constructor for MapboxSearchGeocodingFeatureProperties
   const MapboxSearchGeocodingFeatureProperties(
       {this.mapboxId,
       this.featureType,
@@ -51,7 +51,7 @@ class MapboxSearchGeocodingFeatureProperties {
       this.bbox,
       this.matchCode});
 
-  // Factory method to create MapboxSearchGeocodingFeatureProperties from JSON data
+  /// Factory method to create MapboxSearchGeocodingFeatureProperties from JSON data
   factory MapboxSearchGeocodingFeatureProperties.fromJson(Json json) {
     return MapboxSearchGeocodingFeatureProperties(
         mapboxId: json['id'] as String?,

@@ -23,37 +23,37 @@ import 'package:dart_mapbox_search/src/utils/typdefs.dart';
 /// ------------
 /// When providing more than one language in the context object for the country, region, district, place, neighborhood properties will appear the translations property. This is an object where the key is the language code and the value is an object with language and name properties.
 class MapboxSearchContext {
-  // Country information of the search result
+  /// Country information of the search result
   final MapboxSearchContextCountry? country;
 
-  // Region information of the search result
+  /// Region information of the search result
   final MapboxSearchContextRegion? region;
 
-  // Postcode information of the search result
+  /// Postcode information of the search result
   final MapboxSearchContextPostcode? postcode;
 
-  // District information of the search result
+  /// District information of the search result
   final MapboxSearchContextDistrict? district;
 
-  // Place information of the search result
+  /// Place information of the search result
   final MapboxSearchContextPlace? place;
 
-  // Locality information of the search result
+  /// Locality information of the search result
   final MapboxSearchContextLocality? locality;
 
-  // Neighborhood information of the search result
+  /// Neighborhood information of the search result
   final MapboxSearchContextNeighborhood? neighborhood;
 
-  // Address information of the search result
+  /// Address information of the search result
   final MapboxSearchContextAddress? address;
 
-  // Street information of the search result
+  /// Street information of the search result
   final MapboxSearchContextStreet? street;
 
-  // Secondary address information of the search result
+  /// Secondary address information of the search result
   final MapboxSearchContextSecondaryAddress? secondaryAddress;
 
-  // Constructor for creating a MapboxSearchContext instance with optional parameters
+  /// Constructor for creating a MapboxSearchContext instance with optional parameters
   const MapboxSearchContext(
       {this.country,
       this.region,
@@ -66,7 +66,7 @@ class MapboxSearchContext {
       this.street,
       this.secondaryAddress});
 
-  // Factory method for creating a MapboxSearchContext instance from a JSON object
+  /// Factory method for creating a MapboxSearchContext instance from a JSON object
   factory MapboxSearchContext.fromJson(Json json) {
     return MapboxSearchContext(
         country: (json['country'] as Json?).whenNotNull<MapboxSearchContextCountry>(

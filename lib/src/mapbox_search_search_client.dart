@@ -27,15 +27,15 @@ import 'package:dart_mapbox_search/src/models/search/mapbox_search_route.dart';
 /// The /suggest endpoint is used in combination with the /retrieve endpoint to create an interactive search experience for end users. Within your application, send user search queries to the /suggest endpoint to get suggested results for the given search query.
 /// When a user selects a result on the application UI, you should trigger a /retrieve request to get detailed information about the selection.
 
-// The client for the Mapbox Search Box API
+/// The client for the Mapbox Search Box API
 class MapboxSearchSearchClient {
-  // Access token for API authentication
+  /// Access token for API authentication
   final String _accessToken;
 
-  // Base URI for the Search API
+  /// Base URI for the Search API
   final Uri _baseUri = Uri.parse('https://api.mapbox.com/search/searchbox/v1/');
 
-  // Constructor to initialize the client with the access token
+  /// Constructor to initialize the client with the access token
   MapboxSearchSearchClient({
     required String accessToken,
   }) : _accessToken = accessToken;
@@ -47,36 +47,50 @@ class MapboxSearchSearchClient {
   ///
   /// This endpoint provides a list of suggested search results for the user query. This endpoint, along with the /retrieve endpoint, can be used to add autocomplete search functionality to your applications.
   Future<MapboxSearchResult<MapboxSearchSuggestResponse>> suggest(
-      // The user's query string. The query is limited to 256 characters.
+
+      /// The user's query string. The query is limited to 256 characters.
       String q,
       {
-      // A customer-provided session token value, which groups a series of requests together for billing purposes. UUIDv4 is recommended.
+      /// A customer-provided session token value, which groups a series of requests together for billing purposes. UUIDv4 is recommended.
       String? sessionToken,
-      // The language to be returned. If not provided, the default is English.
+
+      /// The language to be returned. If not provided, the default is English.
       MapboxSearchLanguage? language,
-      // The number of results to return, up to 10.
+
+      /// The number of results to return, up to 10.
       int? limit,
-      // Bias the response to favor results that are closer to a specific location. Provide either MapboxSearchIpProximity() to get results closest to the user's IP location or provide MapboxSearchPointProximity() with values for longitude and latitude. If not provided, the default is IP proximity. When both proximity and origin are provided, origin is interpreted as the target of a route, while proximity indicates the current user location.
+
+      /// Bias the response to favor results that are closer to a specific location. Provide either MapboxSearchIpProximity() to get results closest to the user's IP location or provide MapboxSearchPointProximity() with values for longitude and latitude. If not provided, the default is IP proximity. When both proximity and origin are provided, origin is interpreted as the target of a route, while proximity indicates the current user location.
       MapboxSearchProximity? proximity,
-      // The location from which to calculate distance. When both proximity and origin are provided, origin is interpreted as the target of a route, while proximity indicates the current user location. This parameter is required for distance-to-target estimates, but may incur additional latency.
+
+      /// The location from which to calculate distance. When both proximity and origin are provided, origin is interpreted as the target of a route, while proximity indicates the current user location. This parameter is required for distance-to-target estimates, but may incur additional latency.
       MapboxSearchPoint? origin,
-      // Limit results to only those contained within the supplied bounding box. The bounding box cannot cross the 180th meridian.
+
+      /// Limit results to only those contained within the supplied bounding box. The bounding box cannot cross the 180th meridian.
       MapboxSearchBox? bbox,
-      // The navigation routing profile to use. Available profiles are: driving, walking, and cycling.
+
+      /// The navigation routing profile to use. Available profiles are: driving, walking, and cycling.
       MapboxSearchNavigationProfile? navigationProfile,
-      // The route to be used for searching. This parameter enables searching along a route. Both polyline5 and polyline6 precision are accepted, but must be specified using this parameter. Correct results depend on including the right route_geometry for the route provided.
+
+      /// The route to be used for searching. This parameter enables searching along a route. Both polyline5 and polyline6 precision are accepted, but must be specified using this parameter. Correct results depend on including the right route_geometry for the route provided.
       MapboxSearchRoute? route,
-      // Maximum detour in estimated minutes from route.
+
+      /// Maximum detour in estimated minutes from route.
       num? timeDeviation,
-      // Used to estimate the time of arrival from the location specified in origin or proximity. This parameter, along with navigationProfile and origin / proximity, is required for ETA calculations. ETA calculations will incur additional latency.
+
+      /// Used to estimate the time of arrival from the location specified in origin or proximity. This parameter, along with navigationProfile and origin / proximity, is required for ETA calculations. ETA calculations will incur additional latency.
       bool estimateTimeOfArrival = false,
-      // A list of countries.
+
+      /// A list of countries.
       List<String>? countries,
-      // Limit results to one or more types of features. If no types are specified, all possible types may be returned. Available types are: country, region, postcode, district, place, city, locality, neighborhood, street, address, poi, and category.
+
+      /// Limit results to one or more types of features. If no types are specified, all possible types may be returned. Available types are: country, region, postcode, district, place, city, locality, neighborhood, street, address, poi, and category.
       List<MapboxSearchFeatureType>? featureTypes,
-      // Limit results to those that belong to one or more categories.
+
+      /// Limit results to those that belong to one or more categories.
       List<MapboxSearchPoiCategory>? poiCategories,
-      // A list of categories that limits POI results to those that are not part of the given categories.
+
+      /// A list of categories that limits POI results to those that are not part of the given categories.
       List<MapboxSearchPoiCategory>? poiCategoryExclusions}) async {
     // Validate query and limit parameters
     assert(q.trim().isNotEmpty && q.trim().length <= 256,
@@ -90,8 +104,9 @@ class MapboxSearchSearchClient {
         'At least one featureType is not allowed for this request.');
 
     // Generate a session token if not provided
-    if (sessionToken == null || sessionToken.isEmpty)
+    if (sessionToken == null || sessionToken.isEmpty) {
       sessionToken = Uuid().v4();
+    }
 
     // Construct the request URI with query parameters
     final Uri uri = Uri(
@@ -131,8 +146,9 @@ class MapboxSearchSearchClient {
     final Json body = json.decode(response.body);
 
     // Return Failure when statusCode is not OK
-    if (response.statusCode != 200)
+    if (response.statusCode != 200) {
       return MapboxSearchFailure.fromCodeAndJson(response.statusCode, body);
+    }
 
     // Return parsed data when statusCode is OK
     final MapboxSearchSuggestResponse result =
@@ -146,21 +162,25 @@ class MapboxSearchSearchClient {
   ///
   /// After a successful call to the /suggest endpoint, you will use the ID contained in a suggestion's mapbox_id property to retrieve detailed information about the feature.
   Future<MapboxSearchResult<MapboxSearchSearchResponse>> retrieve(
-      // The Mapbox ID
+
+      /// The Mapbox ID
       String mapboxId,
       {
-      // A customer-provided session token value, which groups a series of requests together for billing purposes. UUIDv4 is recommended.
+      /// A customer-provided session token value, which groups a series of requests together for billing purposes. UUIDv4 is recommended.
       String? sessionToken,
-      // The language to be returned. If not provided, the default is English.
+
+      /// The language to be returned. If not provided, the default is English.
       MapboxSearchLanguage? language,
-      // A list of attribute sets which describe the level of metadata that will be returned. Valid options are basic, photos, venue, visit.
+
+      /// A list of attribute sets which describe the level of metadata that will be returned. Valid options are basic, photos, venue, visit.
       List<MapboxSearchAttributeSet>? attributeSets}) async {
     // Validate query and limit parameters
     assert(mapboxId.trim().isNotEmpty, 'The mapboxId should not be empty.');
 
     // Generate a session token if not provided
-    if (sessionToken == null || sessionToken.isEmpty)
+    if (sessionToken == null || sessionToken.isEmpty) {
       sessionToken = Uuid().v4();
+    }
 
     // Construct the request URI with query parameters
     final Uri uri = Uri(
@@ -182,8 +202,9 @@ class MapboxSearchSearchClient {
     final Json body = json.decode(response.body);
 
     // Return Failure when statusCode is not OK
-    if (response.statusCode != 200)
+    if (response.statusCode != 200) {
       return MapboxSearchFailure.fromCodeAndJson(response.statusCode, body);
+    }
 
     // Return parsed data when statusCode is OK
     final MapboxSearchSearchResponse result =
@@ -195,30 +216,41 @@ class MapboxSearchSearchClient {
   ///
   /// GET https://api.mapbox.com/search/searchbox/v1/forward?q={search_text}
   Future<MapboxSearchResult<MapboxSearchSearchResponse>> forward(
-      // The user's query string. The query string is limited to 256 characters.
+
+      /// The user's query string. The query string is limited to 256 characters.
       String q,
       {
-      // The language to be returned. If not provided, the default is English.
+      /// The language to be returned. If not provided, the default is English.
       MapboxSearchLanguage? language,
-      // The number of results to return, up to 10.
+
+      /// The number of results to return, up to 10.
       int? limit,
-      // Bias the response to favor results that are closer to a specific location. Provide either MapboxSearchIpProximity() to get results closest to the user's IP location or provide MapboxSearchPointProximity() with values for longitude and latitude. If not provided, the default is IP proximity. When both proximity and origin are provided, origin is interpreted as the target of a route, while proximity indicates the current user location.
+
+      /// Bias the response to favor results that are closer to a specific location. Provide either MapboxSearchIpProximity() to get results closest to the user's IP location or provide MapboxSearchPointProximity() with values for longitude and latitude. If not provided, the default is IP proximity. When both proximity and origin are provided, origin is interpreted as the target of a route, while proximity indicates the current user location.
       MapboxSearchProximity? proximity,
-      // The location from which to calculate distance. When both proximity and origin are provided, origin is interpreted as the target of a route, while proximity indicates the current user location. This parameter is required for distance-to-target estimates, but may incur additional latency.
+
+      /// The location from which to calculate distance. When both proximity and origin are provided, origin is interpreted as the target of a route, while proximity indicates the current user location. This parameter is required for distance-to-target estimates, but may incur additional latency.
       MapboxSearchPoint? origin,
-      // Limit results to only those contained within the supplied bounding box. The bounding box cannot cross the 180th meridian.
+
+      /// Limit results to only those contained within the supplied bounding box. The bounding box cannot cross the 180th meridian.
       MapboxSearchBox? bbox,
-      // The navigation routing profile to use. Available profiles are: driving, walking, and cycling.
+
+      /// The navigation routing profile to use. Available profiles are: driving, walking, and cycling.
       MapboxSearchNavigationProfile? navigationProfile,
-      // Used to estimate the time of arrival from the location specified in origin or proximity. This parameter, along with navigationProfile and origin / proximity, is required for ETA calculations. ETA calculations will incur additional latency.
+
+      /// Used to estimate the time of arrival from the location specified in origin or proximity. This parameter, along with navigationProfile and origin / proximity, is required for ETA calculations. ETA calculations will incur additional latency.
       bool estimateTimeOfArrival = false,
-      // A list of countries.
+
+      /// A list of countries.
       List<String>? countries,
-      // Limit results to one or more types of features. If no types are specified, all possible types may be returned. Available types are: country, region, postcode, district, place, city, locality, neighborhood, street, address, poi, and category.
+
+      /// Limit results to one or more types of features. If no types are specified, all possible types may be returned. Available types are: country, region, postcode, district, place, city, locality, neighborhood, street, address, poi, and category.
       List<MapboxSearchFeatureType>? featureTypes,
-      // Limit results to those that belong to one or more categories.
+
+      /// Limit results to those that belong to one or more categories.
       List<MapboxSearchPoiCategory>? poiCategories,
-      // A list of categories that limits POI results to those that are not part of the given categories.
+
+      /// A list of categories that limits POI results to those that are not part of the given categories.
       List<MapboxSearchPoiCategory>? poiCategoryExclusions}) async {
     // Validate query and limit parameters
     assert(q.trim().isNotEmpty && q.trim().length <= 256,
@@ -264,8 +296,9 @@ class MapboxSearchSearchClient {
     final Json body = json.decode(response.body);
 
     // Return Failure when statusCode is not OK
-    if (response.statusCode != 200)
+    if (response.statusCode != 200) {
       return MapboxSearchFailure.fromCodeAndJson(response.statusCode, body);
+    }
 
     // Return parsed data when statusCode is OK
     final MapboxSearchSearchResponse result =
@@ -280,32 +313,44 @@ class MapboxSearchSearchClient {
   ///
   /// Use the Category Search endpoint if you want to query points of interest (POIs) results filtered by a category at a specific location or along a route. The endpoint will only return POIs with the specified category.
   Future<MapboxSearchResult<MapboxSearchSearchResponse>> category(
-      // The category to search for
+
+      /// The category to search for
       MapboxSearchPoiCategory category,
       {
-      // The language to be returned. If not provided, the default is English.
+      /// The language to be returned. If not provided, the default is English.
       MapboxSearchLanguage? language,
-      // The number of results to return, up to 25.
+
+      /// The number of results to return, up to 25.
       int? limit,
-      // Bias the response to favor results that are closer to a specific location. Provide either MapboxSearchIpProximity() to get results closest to the user's IP location or provide MapboxSearchPointProximity() with values for longitude and latitude. If not provided, the default is IP proximity. When both proximity and origin are provided, origin is interpreted as the target of a route, while proximity indicates the current user location.
+
+      /// Bias the response to favor results that are closer to a specific location. Provide either MapboxSearchIpProximity() to get results closest to the user's IP location or provide MapboxSearchPointProximity() with values for longitude and latitude. If not provided, the default is IP proximity. When both proximity and origin are provided, origin is interpreted as the target of a route, while proximity indicates the current user location.
       MapboxSearchProximity? proximity,
-      // The location from which to calculate distance. When both proximity and origin are provided, origin is interpreted as the target of a route, while proximity indicates the current user location. This parameter is required for distance-to-target estimates, but may incur additional latency.
+
+      /// The location from which to calculate distance. When both proximity and origin are provided, origin is interpreted as the target of a route, while proximity indicates the current user location. This parameter is required for distance-to-target estimates, but may incur additional latency.
       MapboxSearchPoint? origin,
-      // Limit results to only those contained within the supplied bounding box. The bounding box cannot cross the 180th meridian.
+
+      /// Limit results to only those contained within the supplied bounding box. The bounding box cannot cross the 180th meridian.
       MapboxSearchBox? bbox,
-      // The navigation routing profile to use. Available profiles are: driving, walking, and cycling.
+
+      /// The navigation routing profile to use. Available profiles are: driving, walking, and cycling.
       MapboxSearchNavigationProfile? navigationProfile,
-      // The route to be used for searching. This parameter enables searching along a route. Both polyline5 and polyline6 precision are accepted, but must be specified using this parameter. Correct results depend on including the right route_geometry for the route provided.
+
+      /// The route to be used for searching. This parameter enables searching along a route. Both polyline5 and polyline6 precision are accepted, but must be specified using this parameter. Correct results depend on including the right route_geometry for the route provided.
       MapboxSearchRoute? route,
-      // Maximum detour in estimated minutes from route.
+
+      /// Maximum detour in estimated minutes from route.
       num? timeDeviation,
-      // Used to estimate the time of arrival from the location specified in origin or proximity. This parameter, along with navigationProfile and origin / proximity, is required for ETA calculations. ETA calculations will incur additional latency.
+
+      /// Used to estimate the time of arrival from the location specified in origin or proximity. This parameter, along with navigationProfile and origin / proximity, is required for ETA calculations. ETA calculations will incur additional latency.
       bool estimateTimeOfArrival = false,
-      // A list of countries.
+
+      /// A list of countries.
       List<String>? countries,
-      // Limit results to one or more types of features. If no types are specified, all possible types may be returned. Available types are: country, region, postcode, district, place, city, locality, neighborhood, street, address, poi, and category.
+
+      /// Limit results to one or more types of features. If no types are specified, all possible types may be returned. Available types are: country, region, postcode, district, place, city, locality, neighborhood, street, address, poi, and category.
       List<MapboxSearchFeatureType>? featureTypes,
-      // A list of categories that limits POI results to those that are not part of the given categories.
+
+      /// A list of categories that limits POI results to those that are not part of the given categories.
       List<MapboxSearchPoiCategory>? poiCategoryExclusions}) async {
     // Validate query and limit parameters
     assert(limit == null || (limit > 0 && limit <= 25),
@@ -350,8 +395,9 @@ class MapboxSearchSearchClient {
     final Json body = json.decode(response.body);
 
     // Return Failure when statusCode is not OK
-    if (response.statusCode != 200)
+    if (response.statusCode != 200) {
       return MapboxSearchFailure.fromCodeAndJson(response.statusCode, body);
+    }
 
     // Return parsed data when statusCode is OK
     final MapboxSearchSearchResponse result =
@@ -364,7 +410,7 @@ class MapboxSearchSearchClient {
   /// GET https://api.mapbox.com/search/searchbox/v1/list/category
   Future<MapboxSearchResult<MapboxSearchListCategoriesResponse>> listCategories(
       {
-      // The language to be returned. If not provided, the default is English.
+      /// The language to be returned. If not provided, the default is English.
       MapboxSearchLanguage? language}) async {
     // Construct the request URI with query parameters
     final Uri uri = Uri(
@@ -382,8 +428,9 @@ class MapboxSearchSearchClient {
     final Json body = json.decode(response.body);
 
     // Return Failure when statusCode is not OK
-    if (response.statusCode != 200)
+    if (response.statusCode != 200) {
       return MapboxSearchFailure.fromCodeAndJson(response.statusCode, body);
+    }
 
     // Return parsed data when statusCode is OK
     final MapboxSearchListCategoriesResponse result =
@@ -397,18 +444,23 @@ class MapboxSearchSearchClient {
   ///
   /// GET https://api.mapbox.com/search/searchbox/v1/reverse?longitude={longitude}&latitude={latitude}
   Future<MapboxSearchResult<MapboxSearchSearchResponse>> reverse(
-      // The longitudinal coordinate of coordinate for the reverse query.
+
+      /// The longitudinal coordinate of coordinate for the reverse query.
       double longitude,
-      // The latitudinal coordinate of coordinate for the reverse query.
+
+      /// The latitudinal coordinate of coordinate for the reverse query.
       double latitude,
       {
-      // The language to be returned. If not provided, the default is English.
+      /// The language to be returned. If not provided, the default is English.
       MapboxSearchLanguage? language,
-      // The number of results to return, up to 10.
+
+      /// The number of results to return, up to 10.
       int? limit,
-      // A list of countries.
+
+      /// A list of countries.
       List<String>? countries,
-      // Limit results to one or more types of features. If no types are specified, all possible types may be returned. Available types are: country, region, prefecture, postcode, district, place, city, locality, oaza, block, street, and address.
+
+      /// Limit results to one or more types of features. If no types are specified, all possible types may be returned. Available types are: country, region, prefecture, postcode, district, place, city, locality, oaza, block, street, and address.
       List<MapboxSearchFeatureType>? featureTypes}) async {
     // Validate query and limit parameters
     assert(limit == null || (limit > 0 && limit <= 10),
@@ -442,8 +494,9 @@ class MapboxSearchSearchClient {
     final Json body = json.decode(response.body);
 
     // Return Failure when statusCode is not OK
-    if (response.statusCode != 200)
+    if (response.statusCode != 200) {
       return MapboxSearchFailure.fromCodeAndJson(response.statusCode, body);
+    }
 
     // Return parsed data when statusCode is OK
     final MapboxSearchSearchResponse result =

@@ -24,15 +24,16 @@ import 'package:dart_mapbox_search/src/extensions/list_extension.dart';
 /// Temporary results are not allowed to be cached, while Permanent results are allowed to be cached and stored indefinitely.
 /// Using Permanent storage with the Geocoding API requires that you have a valid credit card on file or an active enterprise contract.
 /// By default, the Geocoding API will use Temporary geocoding. To use Permanent geocoding, set the optional permanent parameter to true.
-
-// The client for the Mapbox Geocoding API
+///
+/// The client for the Mapbox Geocoding API
 class MapboxSearchGeocodingClient {
-  // Access token for API authentication
+  /// Access token for API authentication
   final String _accessToken;
 
-  // Base URI for the Geocoding API
+  /// Base URI for the Geocoding API
   final Uri _baseUri = Uri.parse('https://api.mapbox.com/search/geocode/v6/');
 
+  /// Constructor of MapboxSearchGeocodingClient
   MapboxSearchGeocodingClient({
     required String accessToken,
   }) : _accessToken = accessToken;
@@ -50,30 +51,37 @@ class MapboxSearchGeocodingClient {
       /// The accuracy of coordinates returned by a forward geocoding request can be affected by how the addresses in the query are formatted.
       String q,
       {
-      // Specify whether you intend to store the results of the query (true) or not (false, default).
+      /// Specify whether you intend to store the results of the query (true) or not (false, default).
       bool? permanent,
 
       /// Specify whether to return autocomplete results (true, default) or not (false). When autocomplete is enabled, results will be included that start with the requested string, rather than responses that match it exactly. For example, a query for India might return both India and Indiana with autocomplete enabled, but only India if it’s disabled.
       /// When autocomplete is enabled, each user keystroke counts as one request to the Geocoding API. For example, a search for "Cali" would be reflected as four separate Geocoding API requests. To reduce the total requests sent, you can configure your application to only call the Geocoding API after a specific number of characters are typed.
       bool? autocomplete,
-      // Limit results to only those contained within the supplied bounding box. The bounding box cannot cross the 180th meridian.
+
+      /// Limit results to only those contained within the supplied bounding box. The bounding box cannot cross the 180th meridian.
       MapboxSearchBox? bbox,
-      // A list of countries.
+
+      /// A list of countries.
       List<MapboxSearchCountry>? countries,
-      // Specify the desired response format of results (geojson, default) or for backwards compatibility (v5).
+
+      /// Specify the desired response format of results (geojson, default) or for backwards compatibility (v5).
       MapboxSearchGeocodingResponseFormat? format,
 
       /// Set the language of the text supplied in responses. Also affects result scoring, with results matching the user’s query in the requested language being preferred over results that match in another language. For example, an autocomplete query for things that start with Frank might return Frankfurt as the first result with an English (en) language parameter, but Frankreich (“France”) with a German (de) language parameter.
       /// Options are IETF language tags comprised of a mandatory ISO 639-1 language code and, optionally, one or more IETF subtags for country or script.
       /// More than one value can also be specified, separated by commas. The first language in the list will be considered as the primary language and a response will be generated for it. For other languages, translations will be provided.
       List<MapboxSearchLanguage>? languages,
-      //Specify the maximum number of results to return. The default is 5 and the maximum supported is 10.
+
+      /// Specify the maximum number of results to return. The default is 5 and the maximum supported is 10.
       int? limit,
-      // Bias the response to favor results that are closer to a specific location. Provide either MapboxSearchIpProximity() to get results closest to the user's IP location or provide MapboxSearchPointProximity() with values for longitude and latitude. If not provided, the default is IP proximity. When both proximity and origin are provided, origin is interpreted as the target of a route, while proximity indicates the current user location.
+
+      /// Bias the response to favor results that are closer to a specific location. Provide either MapboxSearchIpProximity() to get results closest to the user's IP location or provide MapboxSearchPointProximity() with values for longitude and latitude. If not provided, the default is IP proximity. When both proximity and origin are provided, origin is interpreted as the target of a route, while proximity indicates the current user location.
       MapboxSearchProximity? proximity,
-      // Filter results to include only a subset (one or more) of the available feature types. Options are country, region, postcode, district, place, locality, neighborhood, street, and address.
+
+      /// Filter results to include only a subset (one or more) of the available feature types. Options are country, region, postcode, district, place, locality, neighborhood, street, and address.
       List<MapboxSearchFeatureType>? featureTypes,
-      // Returns features that are defined differently by audiences that belong to various regional, cultural, or political groups. Available worldviews are: ar,cn,in,jp,ma,ru,tr,us. If worldview is not set, the us worldview boundaries are returned by default.
+
+      /// Returns features that are defined differently by audiences that belong to various regional, cultural, or political groups. Available worldviews are: ar,cn,in,jp,ma,ru,tr,us. If worldview is not set, the us worldview boundaries are returned by default.
       MapboxSearchGeocodingWorldview? worldview}) async {
     // Validate query and limit parameters
     assert(q.trim().isNotEmpty && q.trim().length <= 256,
@@ -115,8 +123,9 @@ class MapboxSearchGeocodingClient {
     final Json body = json.decode(response.body);
 
     // Return Failure when statusCode is not OK
-    if (response.statusCode != 200)
+    if (response.statusCode != 200) {
       return MapboxSearchFailure.fromCodeAndJson(response.statusCode, body);
+    }
 
     // Return parsed data when statusCode is OK
     final MapboxSearchGeocodingResponse result =
@@ -130,50 +139,67 @@ class MapboxSearchGeocodingClient {
   /// For best results, each element of the query must be assigned a feature type, and set autocomplete to false.
   Future<MapboxSearchResult<MapboxSearchGeocodingResponse>> forwardStructured(
       {
-      // A string including address_number and street. These values can be provided as separate parameters address_number and street listed below.
+      /// A string including address_number and street. These values can be provided as separate parameters address_number and street listed below.
       String? addressLine1,
-      // The number associated with the house.
+
+      /// The number associated with the house.
       String? addressNumber,
-      // The name of the street in the address.
+
+      /// The name of the street in the address.
       String? street,
-      // In some countries like Japan, the block is a component in the address.
+
+      /// In some countries like Japan, the block is a component in the address.
       String? block,
-      // Typically these are cities, villages, municipalities, etc. They’re usually features used in postal addressing, and are suitable for display in ambient end-user applications where current-location context is needed (for example, in weather displays).
+
+      /// Typically these are cities, villages, municipalities, etc. They’re usually features used in postal addressing, and are suitable for display in ambient end-user applications where current-location context is needed (for example, in weather displays).
       String? place,
-      // Top-level sub-national administrative features, such as states in the United States or provinces in Canada or China.
+
+      /// Top-level sub-national administrative features, such as states in the United States or provinces in Canada or China.
       String? region,
-      // Postal codes used in country-specific national addressing systems.
+
+      /// Postal codes used in country-specific national addressing systems.
       String? postcode,
-      // Official sub-city features present in countries where such an additional administrative layer is used in postal addressing, or where such features are commonly referred to in local parlance. Examples include city districts in Brazil and Chile and arrondissements in France.
+
+      /// Official sub-city features present in countries where such an additional administrative layer is used in postal addressing, or where such features are commonly referred to in local parlance. Examples include city districts in Brazil and Chile and arrondissements in France.
       String? locality,
-      // Colloquial sub-city features often referred to in local parlance. Unlike locality features, these typically lack official status and may lack universally agreed-upon boundaries. Not available for reverse geocoding requests.
+
+      /// Colloquial sub-city features often referred to in local parlance. Unlike locality features, these typically lack official status and may lack universally agreed-upon boundaries. Not available for reverse geocoding requests.
       String? neighborhood,
-      // Generally recognized countries or, in some cases like Hong Kong, an area of quasi-national administrative status that has a designated country code under ISO 3166-1.
+
+      /// Generally recognized countries or, in some cases like Hong Kong, an area of quasi-national administrative status that has a designated country code under ISO 3166-1.
       String? country,
-      // Specify whether you intend to store the results of the query (true) or not (false, default).
+
+      /// Specify whether you intend to store the results of the query (true) or not (false, default).
       bool? permanent,
 
       /// Specify whether to return autocomplete results (true, default) or not (false). When autocomplete is enabled, results will be included that start with the requested string, rather than responses that match it exactly. For example, a query for India might return both India and Indiana with autocomplete enabled, but only India if it’s disabled.
       /// When autocomplete is enabled, each user keystroke counts as one request to the Geocoding API. For example, a search for "Cali" would be reflected as four separate Geocoding API requests. To reduce the total requests sent, you can configure your application to only call the Geocoding API after a specific number of characters are typed.
       bool? autocomplete,
-      // Limit results to only those contained within the supplied bounding box. The bounding box cannot cross the 180th meridian.
+
+      /// Limit results to only those contained within the supplied bounding box. The bounding box cannot cross the 180th meridian.
       MapboxSearchBox? bbox,
-      // A list of countries.
+
+      /// A list of countries.
       List<MapboxSearchCountry>? countries,
-      // Specify the desired response format of results (geojson, default) or for backwards compatibility (v5).
+
+      /// Specify the desired response format of results (geojson, default) or for backwards compatibility (v5).
       MapboxSearchGeocodingResponseFormat? format,
 
       /// Set the language of the text supplied in responses. Also affects result scoring, with results matching the user’s query in the requested language being preferred over results that match in another language. For example, an autocomplete query for things that start with Frank might return Frankfurt as the first result with an English (en) language parameter, but Frankreich (“France”) with a German (de) language parameter.
       /// Options are IETF language tags comprised of a mandatory ISO 639-1 language code and, optionally, one or more IETF subtags for country or script.
       /// More than one value can also be specified, separated by commas. The first language in the list will be considered as the primary language and a response will be generated for it. For other languages, translations will be provided.
       List<MapboxSearchLanguage>? languages,
-      //Specify the maximum number of results to return. The default is 5 and the maximum supported is 10.
+
+      /// Specify the maximum number of results to return. The default is 5 and the maximum supported is 10.
       int? limit,
-      // Bias the response to favor results that are closer to a specific location. Provide either MapboxSearchIpProximity() to get results closest to the user's IP location or provide MapboxSearchPointProximity() with values for longitude and latitude. If not provided, the default is IP proximity. When both proximity and origin are provided, origin is interpreted as the target of a route, while proximity indicates the current user location.
+
+      /// Bias the response to favor results that are closer to a specific location. Provide either MapboxSearchIpProximity() to get results closest to the user's IP location or provide MapboxSearchPointProximity() with values for longitude and latitude. If not provided, the default is IP proximity. When both proximity and origin are provided, origin is interpreted as the target of a route, while proximity indicates the current user location.
       MapboxSearchProximity? proximity,
-      // Filter results to include only a subset (one or more) of the available feature types. Options are country, region, postcode, district, place, locality, neighborhood, street, and address.
+
+      /// Filter results to include only a subset (one or more) of the available feature types. Options are country, region, postcode, district, place, locality, neighborhood, street, and address.
       List<MapboxSearchFeatureType>? featureTypes,
-      // Returns features that are defined differently by audiences that belong to various regional, cultural, or political groups. Available worldviews are: ar,cn,in,jp,ma,ru,tr,us. If worldview is not set, the us worldview boundaries are returned by default.
+
+      /// Returns features that are defined differently by audiences that belong to various regional, cultural, or political groups. Available worldviews are: ar,cn,in,jp,ma,ru,tr,us. If worldview is not set, the us worldview boundaries are returned by default.
       MapboxSearchGeocodingWorldview? worldview}) async {
     // Validate query and limit parameters
     assert(limit == null || (limit > 0 && limit <= 10),
@@ -226,8 +252,9 @@ class MapboxSearchGeocodingClient {
     final Json body = json.decode(response.body);
 
     // Return Failure when statusCode is not OK
-    if (response.statusCode != 200)
+    if (response.statusCode != 200) {
       return MapboxSearchFailure.fromCodeAndJson(response.statusCode, body);
+    }
 
     // Return parsed data when statusCode is OK
     final MapboxSearchGeocodingResponse result =
@@ -235,15 +262,22 @@ class MapboxSearchGeocodingClient {
     return MapboxSearchResult<MapboxSearchGeocodingResponse>.success(result);
   }
 
+  /// With Reverse lookup, you can get a list of addresses and POIs around a given coordinate (e,g, what is around 33.9416° N, 118.4085° W).
+  /// The /reverse endpoint allows you to look up a single pair of coordinates and returns the geographic feature or features that exist at that location.
+  ///
+  /// GET https://api.mapbox.com/search/searchbox/v1/reverse?longitude={longitude}&latitude={latitude}
   Future<MapboxSearchResult<MapboxSearchGeocodingResponse>> reverse(
-      // The longitude decimal value from the geographic coordinate for the location being queried.
+
+      /// The longitude decimal value from the geographic coordinate for the location being queried.
       double longitude,
-      // The latitude decimal value from the geographic coordinate for the location being queried.
+
+      /// The latitude decimal value from the geographic coordinate for the location being queried.
       double latitude,
       {
-      // Specify whether you intend to store the results of the query (true) or not (false, default).
+      /// Specify whether you intend to store the results of the query (true) or not (false, default).
       bool? permanent,
-      // A list of countries.
+
+      /// A list of countries.
       List<MapboxSearchCountry>? countries,
 
       /// Set the language of the text supplied in responses. Also affects result scoring, with results matching the user’s query in the requested language being preferred over results that match in another language. For example, an autocomplete query for things that start with Frank might return Frankfurt as the first result with an English (en) language parameter, but Frankreich (“France”) with a German (de) language parameter.
@@ -254,9 +288,11 @@ class MapboxSearchGeocodingClient {
       /// Specify the maximum number of results to return. The default is 1 and the maximum supported is 5.
       /// The default behavior in reverse geocoding is to return at most one feature at each of the multiple levels of the administrative hierarchy (for example, one address, one region, one country). Increasing the limit allows returning multiple features of the same type, but only for one type (for example, multiple address results). So, setting limit to a higher-than-default value requires specifying exactly one types parameter.
       int? limit,
-      // Filter results to include only a subset (one or more) of the available feature types. Options are country, region, postcode, district, place, locality, neighborhood, street, and address.
+
+      /// Filter results to include only a subset (one or more) of the available feature types. Options are country, region, postcode, district, place, locality, neighborhood, street, and address.
       List<MapboxSearchFeatureType>? featureTypes,
-      // Returns features that are defined differently by audiences that belong to various regional, cultural, or political groups. Available worldviews are: ar,cn,in,jp,ma,ru,tr,us. If worldview is not set, the us worldview boundaries are returned by default.
+
+      /// Returns features that are defined differently by audiences that belong to various regional, cultural, or political groups. Available worldviews are: ar,cn,in,jp,ma,ru,tr,us. If worldview is not set, the us worldview boundaries are returned by default.
       MapboxSearchGeocodingWorldview? worldview}) async {
     // Validate query and limit parameters
     assert(limit == null || (limit > 0 && limit <= 5),
@@ -295,8 +331,9 @@ class MapboxSearchGeocodingClient {
     final Json body = json.decode(response.body);
 
     // Return Failure when statusCode is not OK
-    if (response.statusCode != 200)
+    if (response.statusCode != 200) {
       return MapboxSearchFailure.fromCodeAndJson(response.statusCode, body);
+    }
 
     // Return parsed data when statusCode is OK
     final MapboxSearchGeocodingResponse result =

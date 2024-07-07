@@ -82,71 +82,180 @@
 /// - tr: Turkish
 /// - zh_Hant: Traditional Chinese
 enum MapboxSearchLanguage {
+  /// de: German
   de('de', null),
+
+  /// en: English
   en('en', null),
+
+  /// es: Spanish
   es('es', null),
+
+  /// fr: French
   fr('fr', null),
+
+  /// it: Italian
   it('it', null),
+
+  /// nl: Dutch
   nl('nl', null),
+
+  /// pl: Polish
   pl('pl', null),
+
+  /// az: Azerbaijani
   az('az', null),
+
+  /// bn: Bengali
   bn('bn', null),
+
+  /// ca: Catalan
   ca('ca', null),
+
+  /// cs: Czech
   cs('cs', null),
+
+  /// da: Danish
   da('da', null),
+
+  /// el: Modern Greek
   el('el', null),
+
+  /// fa: Persian
   fa('fa', null),
+
+  /// fi: Finnish
   fi('fi', null),
+
+  /// ga: Irish
   ga('ga', null),
+
+  /// hu: Hungarian
   hu('hu', null),
+
+  /// id: Indonesian
   id('id', null),
+
+  /// is_: Icelandic
   is_('is', null),
+
+  /// ja: Japanese
   ja('ja', null),
+
+  /// ka: Geogian
   ka('ka', null),
+
+  /// km: Central Khmer
   km('km', null),
+
+  /// ko: Korean
   ko('ko', null),
+
+  /// lt: Lithuanian
   lt('lt', null),
+
+  /// lv: Latvian
   lv('lv', null),
+
+  /// mn: Monolian
   mn('mn', null),
+
+  /// pt: Portuguese
   pt('pt', null),
+
+  /// ro: Romanian
   ro('ro', null),
+
+  /// sk: Slovak
   sk('sk', null),
+
+  /// sq: Albanian
   sq('sq', null),
+
+  /// sv: Swedish
   sv('sv', null),
+
+  /// th: Thai
   th('th', null),
+
+  /// tl: Tagalog
   tl('tl', null),
+
+  /// uk: Ukrainian
   uk('uk', null),
+
+  /// vi: Vietnamese
   vi('vi', null),
+
+  /// zh: Chinese
   zh('zh', null),
+
+  /// zhHans: Simplified Chinese
   zhHans('zh_Hans', null),
+
+  /// zhTW: Taiwanese Mandarin
   zhTW('zh_TW', null),
+
+  /// ar: Arabic
   ar('ar', null),
+
+  /// bs: Bosnian
   bs('bs', null),
+
+  /// gu: Gujarati
   gu('gu', null),
+
+  /// he: Hebrew
   he('he', null),
+
+  /// hi: Hindi
   hi('hi', null),
+
+  /// kk: Kazakh
   kk('kk', null),
+
+  /// lo: Lao
   lo('lo', null),
+
+  /// my: Burmese
   my('my', null),
+
+  /// nb: Norwegian Bokmål
   nb('nb', null),
+
+  /// ru: Russian
   ru('ru', null),
+
+  /// sr: Serbian
   sr('sr', null),
+
+  /// te: Telugu
   te('te', null),
+
+  /// tk: Turkmen
   tk('tk', null),
+
+  /// tr: Turkish
   tr('tr', null),
+
+  /// zhHant: Traditional Chinese
   zhHant('zh_Hant', null);
 
+  /// The iso639_1 code
   final String iso639_1;
+
+  /// The ietf code
   final String? ietf;
 
+  /// The constructor of MapboxSearchLanguage
   const MapboxSearchLanguage(this.iso639_1, this.ietf);
 
-  // Method for returning the corresponding concenated code
+  /// Method for returning the corresponding concenated code
   String toQueryParameter() {
     return ietf != null ? '$iso639_1-$ietf' : iso639_1;
   }
 
-  // Method for returning a language based on a provided value
+  /// Method for returning a language based on a provided value
   static MapboxSearchLanguage fromString(String value) {
     return MapboxSearchLanguage.values
         .firstWhere((p) => p.toQueryParameter() == value);

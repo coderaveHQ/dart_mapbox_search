@@ -1,19 +1,19 @@
 import 'package:dart_mapbox_search/src/models/search/suggest/mapbox_search_suggest_response_suggestion.dart';
 import 'package:dart_mapbox_search/src/utils/typdefs.dart';
 
-// Represents a response by the /suggest endpoint
+/// Represents a response by the /suggest endpoint
 class MapboxSearchSuggestResponse {
-  // The returned suggestion objects.
+  /// The returned suggestion objects.
   final List<MapboxSearchSuggestResponseSuggestion> suggestions;
 
-  // The attribution data for results.
+  /// The attribution data for results.
   final String attribution;
 
-  // Constructor for MapboxSearchSuggestResponse.
+  /// Constructor for MapboxSearchSuggestResponse.
   const MapboxSearchSuggestResponse(
       {required this.suggestions, required this.attribution});
 
-  // Factory method to create a MapboxSearchSuggestResponse from JSON data.
+  /// Factory method to create a MapboxSearchSuggestResponse from JSON data.
   factory MapboxSearchSuggestResponse.fromJson(Json json) {
     return MapboxSearchSuggestResponse(
         // Convert the JSON 'suggestions' array into a list of MapboxSearchSuggestResponseSuggestion objects.
